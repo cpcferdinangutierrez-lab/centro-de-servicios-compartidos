@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
   
   const usuario = document.getElementById("usuario").value;
   const password = document.getElementById("password").value;
-  const resultado = document.getElementById("resultado");
+  const resultado = document.getElementById("loginMsg"); // <-- CORREGIDO
 
   resultado.innerText = "Validando...";
 
@@ -28,6 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     resultado.innerText = "Error de conexión: " + err.message;
   }
 });
+
 
 
 
