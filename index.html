@@ -2,21 +2,94 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Login - Sistema de Pedidos</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Sistema de Pedidos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f2f5;
+      margin: 0;
+    }
+    .login-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 360px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-top: 16px;
+    }
+  </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>Acceso Clientes</h2>
-    <form id="loginForm">
-      <input type="text" id="usuario" placeholder="Usuario" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
-      <button type="submit">Ingresar</button>
-    </form>
-    <p id="loginMsg"></p>
+    <h2>Login</h2>
+    <input id="usuario" placeholder="Usuario">
+    <input id="password" type="password" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+
+    <pre id="resultado"></pre>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwof8jWD5N0N8vjKV5liI3Ms-Hepmt6vf91fwl0e0HiHjNSbwpSt3ULesF5D4f2mOx_/exec";
+
+    function login() {
+      const usuario = document.getElementById("usuario").value;
+      const password = document.getElementById("password").value;
+
+      fetch(WEBAPP_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "login", usuario, password }),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("resultado").textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById("resultado").textContent = "Error de conexión: " + err;
+      });
+    }
+  </script>
 </body>
 </html>
 
