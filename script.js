@@ -1,4 +1,4 @@
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwof8jWD5N0N8vjKV5liI3Ms-Hepmt6vf91fwl0e0HiHjNSbwpSt3ULesF5D4f2mOx_/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzaeLLtW0ZJNDf6iRBdfOncxB3P-BTSEu2z3m2LTHdRT6ZG9yBiB_97lZ-AexHXVmMy/exec?";
 
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
   e.preventDefault();
@@ -28,6 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     resultado.innerText = "Error de conexión: " + err.message;
   }
 });
+
 
 
 
