@@ -1,76 +1,33 @@
-/* === script.js ===
-   Ajusta la constante scriptURL con la URL "Deploy as web app" de tu Apps Script.
-   Hoja Usuarios: UserID | Usuario | Contraseña
-*/
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwof8jWD5N0N8vjKV5liI3Ms-Hepmt6vf91fwl0e0HiHjNSbwpSt3ULesF5D4f2mOx_/exec";
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbynYFa1VhI-ipqN8x3k3c0COrVJ369cbvXj-T1sc57-4WSCBy2xHjGioPeLlUNplTli/exec"; // <-- PÉGALA AQUÍ
-
-const form = document.getElementById("loginForm");
-const inputUsuario = document.getElementById("usuario");
-const inputPassword = document.getElementById("password");
-const msg = document.getElementById("loginMsg");
-
-function setMsg(text, ok = false) {
-  msg.textContent = text;
-  msg.style.color = ok ? "green" : "red";
-}
-
-function disableForm(disabled) {
-  form.querySelector("button[type='submit']").disabled = disabled;
-}
-
-form.addEventListener("submit", async (e) => {
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
   e.preventDefault();
-  setMsg("");
-  disableForm(true);
+  
+  const usuario = document.getElementById("usuario").value;
+  const password = document.getElementById("password").value;
+  const resultado = document.getElementById("resultado");
 
-  const usuario = (inputUsuario.value || "").trim();
-  const password = (inputPassword.value || "").trim();
-
-  if (!usuario || !password) {
-    setMsg("Completa usuario y contraseña.");
-    disableForm(false);
-    return;
-  }
+  resultado.innerText = "Validando...";
 
   try {
-    const res = await fetch(scriptURL, {
+    const response = await fetch(WEBAPP_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "login",
-        usuario,
-        password
-      })
+      body: JSON.stringify({ action: "login", usuario, password })
     });
 
-    // Intentar JSON; si no, texto
-    let data;
-    const text = await res.text();
-    try { data = JSON.parse(text); } catch { data = { status: text }; }
+    const data = await response.json();
 
-    if (data && (data.status === "OK" || data.status === "ok")) {
-      // Soporta backend que devuelva clienteID o userID
-      const clienteID = data.clienteID || data.userID || usuario;
-      const nombreUsuario = data.usuario || usuario;
-      const productos = Array.isArray(data.productos) ? data.productos : [];
-
-      // Guardar en localStorage para usar en pedido.html
-      localStorage.setItem("clienteID", clienteID);
-      localStorage.setItem("usuario", nombreUsuario);
-      localStorage.setItem("productos", JSON.stringify(productos));
-
-      setMsg("Ingreso correcto. Redirigiendo…", true);
-      window.location.href = "pedido.html";
+    if(data.status === "OK") {
+      resultado.innerText = `Bienvenido ${data.usuario}, UserID: ${data.userID}`;
     } else {
-      setMsg("Usuario o contraseña incorrectos ❌");
-      disableForm(false);
+      resultado.innerText = data.message;
     }
-  } catch (err) {
-    console.error(err);
-    setMsg("Error de conexión con el servidor.");
-    disableForm(false);
+
+  } catch(err) {
+    resultado.innerText = "Error de conexión: " + err.message;
   }
 });
+
 
 
