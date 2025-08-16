@@ -8,7 +8,8 @@
 
 <h2>Login</h2>
 
-<form id="loginForm" target="hidden_iframe" method="POST" action="https://script.google.com/macros/s/AKfycbxrX19VEBLT3QfIn2LsLeyLPMg7cKmC9P9oLoUHmWX8JehOi1FiKoSAekYBYH_UC0A/exec">
+<form id="loginForm" target="hidden_iframe" method="POST"
+      action="https://script.google.com/macros/s/AKfycbxrX19VEBLT3QfIn2LsLeyLPMg7cKmC9P9oLoUHmWX8JehOi1FiKoSAekYBYH_UC0A/exec">
   <input type="hidden" name="action" value="login">
   <label>Usuario: <input type="text" name="usuario" required></label><br><br>
   <label>Password: <input type="password" name="password" required></label><br><br>
@@ -17,28 +18,31 @@
 
 <div id="resultado"></div>
 
-<!-- Iframe oculto para recibir la respuesta sin recargar la página -->
-<iframe name="hidden_iframe" style="display:none;" onload="handleResponse(this)"></iframe>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-function handleResponse(iframe) {
+// Definir la función antes de usarla
+function handleResponse() {
+  const iframe = document.querySelector('iframe[name="hidden_iframe"]');
   try {
     const doc = iframe.contentDocument || iframe.contentWindow.document;
     const body = doc.body.innerText;
-
     if (!body) return;
 
     const data = JSON.parse(body);
-
     if(data.status === "OK") {
       document.getElementById("resultado").innerText = `¡Bienvenido ${data.usuario}!`;
     } else {
       document.getElementById("resultado").innerText = data.message;
     }
   } catch(e) {
-    // Ignorar errores de carga inicial del iframe
+    // Ignorar errores iniciales
   }
 }
+
+// Asociar el onload del iframe a la función
+const iframe = document.querySelector('iframe[name="hidden_iframe"]');
+iframe.onload = handleResponse;
 </script>
 
 </body>
