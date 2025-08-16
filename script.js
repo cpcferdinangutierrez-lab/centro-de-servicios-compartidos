@@ -3,7 +3,7 @@
    Hoja Usuarios: UserID | Usuario | Contraseña
 */
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbxT5pDW91twJyrlTZZchVYE81fO8Nz0_hoID9GFJM4WhD8G2A4se5hCXKrfYf4q_Ped/exec"; // <-- PÉGALA AQUÍ
+const scriptURL = "https://script.google.com/macros/s/AKfycbzf_ZTB3hf5p9YlpaeeWddka8hM17pe6e_q9yUxRSlxIddNGXbD3a3mVKypsIpJyyoi/exec"; // <-- PÉGALA AQUÍ
 
 const form = document.getElementById("loginForm");
 const inputUsuario = document.getElementById("usuario");
@@ -72,3 +72,4 @@ form.addEventListener("submit", async (e) => {
     disableForm(false);
   }
 });
+
