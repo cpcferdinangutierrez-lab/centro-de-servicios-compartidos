@@ -8,6 +8,7 @@
 
 <h2>Login</h2>
 
+<!-- Formulario que envía los datos directamente al Web App -->
 <form id="loginForm" target="hidden_iframe" method="POST"
       action="https://script.google.com/macros/s/AKfycbxrX19VEBLT3QfIn2LsLeyLPMg7cKmC9P9oLoUHmWX8JehOi1FiKoSAekYBYH_UC0A/exec">
   <input type="hidden" name="action" value="login">
@@ -16,12 +17,13 @@
   <button type="submit">Entrar</button>
 </form>
 
-<div id="resultado"></div>
+<div id="resultado" style="margin-top:20px; font-weight:bold;"></div>
 
+<!-- Iframe oculto para recibir la respuesta sin recargar la página -->
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-// Definir la función antes de usarla
+// Función para manejar la respuesta del Web App
 function handleResponse() {
   const iframe = document.querySelector('iframe[name="hidden_iframe"]');
   try {
@@ -30,23 +32,24 @@ function handleResponse() {
     if (!body) return;
 
     const data = JSON.parse(body);
-    if(data.status === "OK") {
+
+    if (data.status === "OK") {
       document.getElementById("resultado").innerText = `¡Bienvenido ${data.usuario}!`;
     } else {
       document.getElementById("resultado").innerText = data.message;
     }
   } catch(e) {
-    // Ignorar errores iniciales
+    // Ignora errores iniciales
   }
 }
 
-// Asociar el onload del iframe a la función
-const iframe = document.querySelector('iframe[name="hidden_iframe"]');
-iframe.onload = handleResponse;
+// Asociar el evento onload del iframe a la función
+document.querySelector('iframe[name="hidden_iframe"]').onload = handleResponse;
 </script>
 
 </body>
 </html>
+
 
 
 
