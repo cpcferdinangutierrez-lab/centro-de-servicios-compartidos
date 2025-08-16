@@ -1,13 +1,14 @@
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzaeLLtW0ZJNDf6iRBdfOncxB3P-BTSEu2z3m2LTHdRT6ZG9yBiB_97lZ-AexHXVmMy/exec?";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwof8jWD5N0N8vjKV5liI3Ms-Hepmt6vf91fwl0e0HiHjNSbwpSt3ULesF5D4f2mOx_/exec";
 
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   
   const usuario = document.getElementById("usuario").value;
   const password = document.getElementById("password").value;
-  const resultado = document.getElementById("loginMsg"); // <-- CORREGIDO
+  const loginMsg = document.getElementById("loginMsg");
 
-  resultado.innerText = "Validando...";
+  loginMsg.style.color = "black";
+  loginMsg.innerText = "Validando...";
 
   try {
     const response = await fetch(WEBAPP_URL, {
@@ -19,13 +20,16 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     const data = await response.json();
 
     if(data.status === "OK") {
-      resultado.innerText = `Bienvenido ${data.usuario}, UserID: ${data.userID}`;
+      loginMsg.style.color = "green";
+      loginMsg.innerText = `Bienvenido ${data.usuario}, UserID: ${data.userID}`;
     } else {
-      resultado.innerText = data.message;
+      loginMsg.style.color = "red";
+      loginMsg.innerText = data.message;
     }
 
   } catch(err) {
-    resultado.innerText = "Error de conexión: " + err.message;
+    loginMsg.style.color = "red";
+    loginMsg.innerText = "Error de conexión: " + err.message;
   }
 });
 
