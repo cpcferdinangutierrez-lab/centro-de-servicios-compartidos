@@ -6,49 +6,44 @@
 </head>
 <body>
 
-<form id="loginForm">
-  <label>Usuario: <input type="text" name="usuario" required></label><br>
-  <label>Password: <input type="password" name="password" required></label><br>
+<h2>Login</h2>
+
+<form id="loginForm" target="hidden_iframe" method="POST" action="https://script.google.com/macros/s/AKfycbxrX19VEBLT3QfIn2LsLeyLPMg7cKmC9P9oLoUHmWX8JehOi1FiKoSAekYBYH_UC0A/exec">
+  <input type="hidden" name="action" value="login">
+  <label>Usuario: <input type="text" name="usuario" required></label><br><br>
+  <label>Password: <input type="password" name="password" required></label><br><br>
   <button type="submit">Entrar</button>
 </form>
 
 <div id="resultado"></div>
 
+<!-- Iframe oculto para recibir la respuesta sin recargar la página -->
+<iframe name="hidden_iframe" style="display:none;" onload="handleResponse(this)"></iframe>
+
 <script>
-document.getElementById("loginForm").addEventListener("submit", function(e){
-  e.preventDefault(); // Evita que se recargue la página
+function handleResponse(iframe) {
+  try {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    const body = doc.body.innerText;
 
-  const usuario = e.target.usuario.value;
-  const password = e.target.password.value;
+    if (!body) return;
 
-  // URL del Web App desplegado (debe estar como "cualquiera, incluso anónimo")
-  const url = "https://script.google.com/macros/s/AKfycbwoRJmcJ1fXNBe3-rLRN_YbkJKe8WINm0NL6RKTXiRM9j9wizM29VI3GJTce9bWm6sy/exec";
+    const data = JSON.parse(body);
 
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "login",
-      usuario: usuario,
-      password: password
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if(data.status === "OK"){
+    if(data.status === "OK") {
       document.getElementById("resultado").innerText = `¡Bienvenido ${data.usuario}!`;
     } else {
       document.getElementById("resultado").innerText = data.message;
     }
-  })
-  .catch(err => {
-    document.getElementById("resultado").innerText = "Error en la conexión: " + err;
-  });
-});
+  } catch(e) {
+    // Ignorar errores de carga inicial del iframe
+  }
+}
 </script>
 
 </body>
 </html>
+
 
 
 
